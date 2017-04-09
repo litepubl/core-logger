@@ -26,8 +26,9 @@
     "require": {
         "php": ">=7.00.0",
         "psr/log": "^1.0",
-        "psr/container": "^1.0",
         "monolog/monolog": "^1.19",
+        "litepubl/logmanager": "^7.08",
+        "litepubl/mailer": "^7.08"
     },
     "autoload": {
         "psr-4": {
