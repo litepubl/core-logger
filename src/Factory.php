@@ -2,7 +2,7 @@
 
 namespace litepubl\core\logfactory;
 
-use litepubl\core\instances\BaseFactory;
+use litepubl\core\container\factories\Base;
 use litepubl\core\logmanager\FactoryInterface;
 use litepubl\core\logmanager\LogManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -11,19 +11,16 @@ use Monolog\ErrorHandler;
 use Monolog\Formatter\HtmlFormatter;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
-use Psr\Container\ContainerInterface;
 
-class Factory extends BaseFactory implements FactoryInterface
+class Factory extends Base implements FactoryInterface
 {
     const CHANNEL = 'general';
     const FORMAT = "%datetime%\n%channel%.%level_name%:\n%message%\n%context% %extra%\n\n";
-    protected $debug;
-    protected $logFile;
 
-    public function __construct(string $logFile, bool $debug = false)
+    public function getLogFileName(): string
     {
-        $this->logFile = $logFile;
-        $this->debug = $debug;
+        $app = $this->container->get('app');
+        return $app->getPaths()->data . 'logs/log.log';
     }
 
     protected function getClassMap(): array
@@ -39,9 +36,9 @@ class Factory extends BaseFactory implements FactoryInterface
         ];
     }
 
-    public function createManager(): LogManagerInterface
+    public function createManager(): Manager
     {
-        $logger = $this->container->get(LoggerInterface::class);
+        $logger = $this->container->get(Logger::class);
         $runTime = $this->container->get(RuntimeHandler::class);
         $logger->pushHandler($runtime);
         $exceptionFormater  = $this->container->get(ExceptionFormater::class);
@@ -51,10 +48,10 @@ class Factory extends BaseFactory implements FactoryInterface
 
     public function createLogger(): Logger
     {
-        $app = $this->container->get(App::class);
+        $app = $this->container->get('app');
         $logger = new logger(static::CHANNEL);
 
-        if (!$this->debug) {
+        if (!$app->getDebug()) {
             $handler = new ErrorHandler($logger);
             $handler->registerErrorHandler([], false);
             $handler->registerFatalHandler();
@@ -64,7 +61,7 @@ class Factory extends BaseFactory implements FactoryInterface
         $handler->setFormatter(new LineFormatter(static ::FORMAT, null, true, false));
         $logger->pushHandler($handler);
 
-        if (!$this->debug && $app->getInstalled()) {
+        if (!$app->getDebug() && $app->getInstalled()) {
             $logger->pushHandler($this->createMailerHandler());
         }
 
