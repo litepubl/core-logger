@@ -16,24 +16,24 @@ class Factory extends Base implements FactoryInterface
 {
     const CHANNEL = 'general';
     const FORMAT = "%datetime%\n%channel%.%level_name%:\n%message%\n%context% %extra%\n\n";
+    protected $logFileName = 'logs/log.log';
+    protected $implementations = [
+        LogManagerInterface::class=> Manager::class,
+        LoggerInterface::class => Logger::class,
+    ];
 
-    public function getLogFileName(): string
-    {
-        $app = $this->container->get('app');
-        return $app->getPaths()->data . 'logs/log.log';
-    }
-
-    protected function getClassMap(): array
-    {
-        return [
+    protected $classMap = [
         Manager::class=> 'createManager',
-        LogManagerInterface::class=> 'createManager',
         Logger::class => 'createLogger',
-        LoggerInterface::class => 'createLogger',
         MailerHandler::class => 'createMailerHandler',
         RuntimeHandler::class => 'createRuntimeHandler',
         ExceptionFormater::class => 'createExceptionFormater',
         ];
+
+    protected function getLogFileName(): string
+    {
+        $app = $this->container->get('app');
+        return $app->getPaths()->data . $this->logFileName;
     }
 
     public function createManager(): Manager
