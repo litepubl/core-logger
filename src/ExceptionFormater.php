@@ -1,5 +1,6 @@
 <?php
-namespace litepubl\core\logfactory;
+
+namespace LitePubl\Core\Logger;
 
 class ExceptionFormater
 {
@@ -73,40 +74,40 @@ class ExceptionFormater
     public function dump($v): string
     {
         switch (\gettype($v)) {
-        case 'string':
-            if ((strlen($v) > 60) && ($i = strpos($v, ' ', 50))) {
-                $v = substr($v, 0, $i);
-            }
+            case 'string':
+                if ((strlen($v) > 60) && ($i = strpos($v, ' ', 50))) {
+                    $v = substr($v, 0, $i);
+                }
 
-            $result = \sprintf('\'%s\'', $v);
-            break;
+                $result = \sprintf('\'%s\'', $v);
+                break;
 
-        case 'object':
-            $result = \get_class($v);
-            break;
+            case 'object':
+                $result = \get_class($v);
+                break;
 
-        case 'boolean':
-            $result = $v ? 'true' : 'false';
-            break;
+            case 'boolean':
+                $result = $v ? 'true' : 'false';
+                break;
 
-        case 'integer':
-        case 'double':
-        case 'float':
-            $result = $v;
-            break;
+            case 'integer':
+            case 'double':
+            case 'float':
+                $result = $v;
+                break;
 
-        case 'array':
-            $result = '';
-            foreach ($v as $k => $item) {
-                $s = $this->dump($item);
-                $result.= "$k = $s;\n";
-            }
+            case 'array':
+                $result = '';
+                foreach ($v as $k => $item) {
+                    $s = $this->dump($item);
+                    $result.= "$k = $s;\n";
+                }
 
-            $result = "[\n$result]\n";
-            break;
+                $result = "[\n$result]\n";
+                break;
 
-        default:
-            $result = \gettype($v);
+            default:
+                $result = \gettype($v);
         }
 
         return $result;

@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\logfactory;
+namespace LitePubl\Core\Logger;
 
 use Psr\Log\LoggerInterface;
 use litepubl\core\logmanager\LogManagerInterface;
@@ -9,19 +9,19 @@ class Manager implements LogManagerInterface
 {
     protected $logger;
     protected $runtime;
-protected $exceptionFormater;
+    protected $exceptionFormater;
 
     public function __construct(LoggerInterface $logger, RuntimeHandler $runtime, ExceptionFormater $exceptionFormater)
     {
         $this->logger = $logger;
-$this->runtime = $runtime;
-$this->exceptionFormater = $exceptionFormater;
-}
+        $this->runtime = $runtime;
+        $this->exceptionFormater = $exceptionFormater;
+    }
 
     public function getLogger():LoggerInterface
-{
-return $this->logger;
-}
+    {
+        return $this->logger;
+    }
 
     public function logException(\Throwable $e, array $context = [])
     {
@@ -35,6 +35,6 @@ return $this->logger;
 
     public function getHtmlLog(): string
     {
-return $this->runtime->getHtml();
+        return $this->runtime->getHtml();
     }
 }

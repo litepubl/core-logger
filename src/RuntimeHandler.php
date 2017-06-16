@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\logfactory;
+namespace LitePubl\Core\Logger;
 
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;

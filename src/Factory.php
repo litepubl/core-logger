@@ -1,6 +1,6 @@
 <?php
 
-namespace litepubl\core\logfactory;
+namespace LitePubl\Core\Logger;
 
 use litepubl\core\container\factories\Base;
 use litepubl\core\logmanager\FactoryInterface;

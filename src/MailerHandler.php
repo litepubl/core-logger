@@ -1,19 +1,20 @@
 <?php
-namespace litepubl\core\logfactory;
+
+namespace LitePubl\Core\Logger;
 
 use Monolog\Handler\MailHandler;
 use Monolog\Logger;
-use litepubl\mailer\MailerInterface;
+use LitePubl\Core\Mailer\MailerInterface;
 
 class MailerHandler extends MailHandler
 {
-protected $mailer;
+    protected $mailer;
     protected $subject;
 
     public function __construct(MailerInterface $mailer, string $subject, $level = Logger::ERROR, $bubble = true)
     {
         parent::__construct($level, $bubble);
-$this->mailer = $mailer;
+        $this->mailer = $mailer;
         $this->subject = $subject;
     }
 

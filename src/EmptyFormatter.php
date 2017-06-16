@@ -1,5 +1,6 @@
 <?php
-namespace litepubl\core\logfactory;
+
+namespace LitePubl\Core\Logger;
 
 use Monolog\Formatter\FormatterInterface;
 
